@@ -1,0 +1,27 @@
+{
+  "name": "MTFHackDemo",
+  "version": "0.0.0",
+  "description": "",
+  "main": "app.js",
+  "engines": {
+    "node": ">=4.1.1",
+    "npm": ">=2.1.x"
+  },
+  "repository": "",
+  "authors": [
+    "Johanna Tano"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "bleat": "^0.1.8",
+    "dotenv": "^6.0.0",
+    "express": "^4.15.4",
+    "muse-js": "^3.1.0",
+    "noble": "^1.9.1",
+    "node-lsl": "^0.1.0",
+    "node-osc": "^2.1.0",
+    "socket.io": "^2.0.3",
+    "socket.io-client": "^2.0.3",
+    "text-encoding": "^0.7.0"
+  }
+}

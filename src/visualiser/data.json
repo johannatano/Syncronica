@@ -1,0 +1,84 @@
+{
+	"mercury": {
+		"index": 0,
+		"name": "Mercury",
+		"scale": 1,
+		"angle": 0,
+		"radius": 36800000,
+		"speed": 88.0,
+		"freq": 0.01
+	},
+	"venus": {
+		"index": 1,
+		"name": "Venus",
+		"scale": 1,
+		"angle": 0,
+		"radius": 67200000,
+		"speed": 224.7,
+		"freq": 417
+	},
+	"earth": {
+		"index": 2,
+		"name": "Earth",
+		"scale": 1,
+		"angle": 0,
+		"radius": 93000000,
+		"speed": 365.2,
+		"freq": 528
+	},
+	"mars": {
+		"index": 3,
+		"name": "Mars",
+		"scale": 1,
+		"angle": 0,
+		"radius": 141600000,
+		"speed": 687.0,
+		"freq": 639
+	},
+	"jupiter": {
+		"index": 4,
+		"name": "Jupiter",
+		"scale": 0.5,
+		"angle": 0,
+		"radius": 483600000,
+		"speed": 4331,
+		"freq": 5
+
+	},
+	"saturn": {
+		"index": 5,
+		"name": "Saturn",
+		"scale": 0.2,
+		"angle": 0,
+		"radius": 886500000,
+		"speed": 10747,
+		"freq": 4
+	},
+	"uranus": {
+		"index": 6,
+		"name": "Uranus",
+		"scale": 0.1,
+		"angle": 0,
+		"radius": 1783700000,
+		"speed": 30589,
+		"freq": 4
+	},
+	"neptune": {
+		"index": 7,
+		"name": "Neptune",
+		"scale": 0.08,
+		"angle": 0,
+		"radius": 2795200000,
+		"speed": 59800,
+		"freq": 4
+	},
+	"pluto": {
+		"index": 8,
+		"name": "Pluto",
+		"scale": 0.05,
+		"angle": 0,
+		"radius": 3670100000,
+		"speed": 90560,
+		"freq": 4
+	}
+}
