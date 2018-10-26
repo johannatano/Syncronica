@@ -46,9 +46,9 @@ export default class Visualiser extends EventEmitter{
 		}
 
 		this.settings = {
-			lineOpacity: 0.5,
-			years: 1,
-			frequency: 1,
+			lineOpacity: 0.25,
+			years: 50,
+			frequency: 147,
 			heroplanet: 2,
 			drawspeed: 20,
 		}
@@ -64,7 +64,7 @@ export default class Visualiser extends EventEmitter{
 			this.setCurrentPlanet(this.currentPlanet);
 		}.bind(this));
 		var lineOpacity = gui.add(this.settings, 'lineOpacity').min(0.1).max(1).step(0.01);
-		var years = gui.add(this.settings, 'years').min(1).max(10000).step(10);
+		var years = gui.add(this.settings, 'years').min(1).max(1000).step(1);
 		var frequency = gui.add(this.settings, 'frequency').min(1).max(1000).step(10);
 		var drawspeed = gui.add(this.settings, 'drawspeed').min(1).max(1000).step(10);
 		years.onChange(function(val){
@@ -82,7 +82,7 @@ export default class Visualiser extends EventEmitter{
 		this.drawIndex = 0;
 		this.MAX_LINES = 2000;
 		for(var i = 0; i < this.MAX_LINES; i++){
-			this.lines.push(new LineData());
+			this.lines.push(new LineData(i));
 		}
 		this.gfx = new PIXI.Graphics();
 		this.gfx.x = this.viewport.w*.5;
@@ -189,12 +189,15 @@ export default class Visualiser extends EventEmitter{
 		// console.log(delta, numLines, f);
 		// let drawSequentially = true;
 		// if(drawSequentially){
-			
+		// console.log(numLines);
+			// if(numLines == this.MAX_LINES) console.log('MAX LINES HIT');
+		// console.log('DRAW', this.settings.drawspeed);
 		for(var i = 0; i < this.settings.drawspeed; i++){
+			// const index = 
 			const line = this.lines[this.drawIndex];
 			var p1 = this.planets[planet1].render(delta*this.drawIndex, true);
 			var p2 = this.planets[planet2].render(delta*this.drawIndex, true);
-			line.set(p1, p2, 1000);
+			line.spawn(p1, p2);
 			this.drawIndex++;
 			if(this.drawIndex >= numLines) this.drawIndex = 0;
 		}
@@ -219,13 +222,11 @@ export default class Visualiser extends EventEmitter{
 		var delta = 360/f;//360 degrees per year -> how many degrees incr per line
 		var numLines =  Math.min(f * this.settings.years * (1 + this.inputData.excitement), this.MAX_LINES);
 		this.drawIndex = 0;
-
 		console.log('DRAW ALL', numLines);
-
 		for(var i = 0; i < numLines; i++){
 			var p1 = this.planets[planet1].render(delta*i, true);
 			var p2 = this.planets[planet2].render(delta*i, true);
-			this.lines[i].set(p1, p2, i);
+			this.lines[i].spawn(p1, p2, i);
 		}
 		this.renderLines();
 	}
@@ -274,7 +275,7 @@ export default class Visualiser extends EventEmitter{
 		var line;
 		this.gfx.clear();
 		while(l > 0, l--){
-			if(this.lines[l].active){
+			// if(this.lines[l].active){
 				line = this.lines[l];
 				line.tick();
 				// line.alpha = this.settings.lineOpacity;
@@ -282,7 +283,7 @@ export default class Visualiser extends EventEmitter{
 				this.gfx.lineStyle(1, 0xffffff, a);
 				this.gfx.moveTo(line.p1.x, line.p1.y);
 				this.gfx.lineTo(line.p2.x, line.p2.y);
-			}
+			// }
 		}
 	}
 

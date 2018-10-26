@@ -34,18 +34,17 @@ canvas{
   font-weight: normal;
   font-family: Times !important;
   letter-spacing: 0.5em;
-  font-size: 4vw;
   color: white;
   margin: 0;
   padding: 0;
-  font-size: 5vw;
+  font-size: 2vw;
 }
 
 
 .frequency, .years{
   color: white;
   font-family: Times;
-  font-size: 3vw;
+  font-size: 1vw;
   color: white;
   letter-spacing: 0.2em;
    margin: 0;
