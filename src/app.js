@@ -16,7 +16,6 @@ import io from 'socket.io-client';
 $(() => {
   var muse = new Muse();
   var museData = new MuseData();
-
   
   var visualiser = new Visualiser();
   visualiser.addInputData('eegReadings', museData);

@@ -104,7 +104,7 @@ export default class LineData{
 
 		const fadeEase = this.targetAlpha ? .1 : 0.01;
 		this.alpha += (this.targetAlpha - this.alpha) * fadeEase;
-
+		if(this.alpha < 0.001) this.alpha = 0;
 
 		if(this.lifetime) this.lifetime--;
 		else this.kill();

@@ -22,7 +22,6 @@ export default class MuseData {
 		// console.log('read', reading);
 		let sensor = this.sensors[Number(reading.electrode)];
 		if(!sensor) return;
-
 		
 		var betaTotal = this.getSumOfArr(reading.samples, this.betaBins);
 		if(betaTotal) sensor.bands.beta.push(Math.log(betaTotal));

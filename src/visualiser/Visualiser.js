@@ -184,12 +184,12 @@ export default class Visualiser extends EventEmitter{
 
 	draw(planet1, planet2){
 		var f = this.settings.frequency/100;//normalize to fit scale 0-1000
-		var delta = 360/f;//360 degrees per year -> how many degrees incr per line
-		var numLines =  Math.min(f * this.settings.years * (1 + this.inputData.excitement), this.MAX_LINES);
+		var delta = 360/f;//2;//360/f;//360 degrees per year -> how many degrees incr per line
+		var numLines =  Math.min((this.settings.years*f) * (1 + this.inputData.excitement), this.MAX_LINES);
 		// console.log(delta, numLines, f);
 		// let drawSequentially = true;
 		// if(drawSequentially){
-		// console.log(numLines);
+		// console.log(f, delta, numLines);
 			// if(numLines == this.MAX_LINES) console.log('MAX LINES HIT');
 		// console.log('DRAW', this.settings.drawspeed);
 		for(var i = 0; i < this.settings.drawspeed; i++){
@@ -224,6 +224,7 @@ export default class Visualiser extends EventEmitter{
 		this.drawIndex = 0;
 		console.log('DRAW ALL', numLines);
 		for(var i = 0; i < numLines; i++){
+			if(!this.alpha) continue;
 			var p1 = this.planets[planet1].render(delta*i, true);
 			var p2 = this.planets[planet2].render(delta*i, true);
 			this.lines[i].spawn(p1, p2, i);
@@ -248,14 +249,9 @@ export default class Visualiser extends EventEmitter{
 			if(excitement) this.inputData.excitement += (excitement - this.inputData.excitement) *.01;
 			if(concentration) this.inputData.concentration += (concentration - this.inputData.concentration) *.01;
 		}
-
-
 		var frequency = this.inputData.concentration * 100;
 		var diff = this.settings.frequency - frequency;
-		// if(Math.abs(diff) > 10) this.changeFrequency(frequency);
-
 		this.draw(this.settings.heroplanet, this.currentPlanet);
-	    
 	    this.timer = requestAnimationFrame(this.tick.bind(this));
 	}
 
