@@ -19,8 +19,15 @@ export default class Muse extends EventEmitter{
 		})
 		.then(()=> this.client.start() )
 		.then(()=> {
+
+			rawControlData
+
+			this.client.rawControlData.subscribe((reading) => {
+				console.log(reading);
+			});
+
 			this.client.eegReadings.subscribe((reading) => {
-				this.emit('muse-data', reading);
+				// this.emit('muse-data', reading);
 			});
 		} )
 	}

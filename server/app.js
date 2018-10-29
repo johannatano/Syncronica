@@ -3,6 +3,10 @@ var SocketServer = require('./socket-server')
 var CONFIG = require('dotenv').config().parsed;
 var osc = require('node-osc');
 
+var oscServer = new osc.Server(5001, 'localhost');
+
+
+
 
 var app = express()
 app.set('port', (CONFIG.WEB_SERVER_PORT || 5000))
@@ -32,23 +36,40 @@ udpServer.on('error', (err) => {
   udpServer.close();
 });
 
-udpServer.on('message', (msg, rinfo) => {
 
-  //This part is completely wrong - need to make it work, should be a value from 0-1 coming in
-  var buff = new Buffer(msg);
-  var arr = new Uint16Array(msg);
-  var sliced = arr.slice(12,16);
-  var buffer = Buffer.from( sliced );
-  var hex = buffer.toString('hex');
-  var n = flipHexString('0x' + hex, 8);
-  var n2 = parseInt(n)/100000;
-  socketServer.emit('data', {freq: n2/30000});//just made some normalization to have a 0-1 value into viz
 
-});
-udpServer.on('listening', () => {
-  const address = udpServer.address();
-});
-udpServer.bind(CONFIG.OSC_SERVER_PORT);
+oscServer.on('message', function(msg, rinfo) {
+      // console.log(msg, rinfo);
+      // socket.emit("message", msg);
+      // console.log(msg);
+      socketServer.emit('osc', msg);
+    });
+
+// udpServer.on('message', (msg, rinfo) => {
+
+
+
+//   //This part is completely wrong - need to make it work, should be a value from 0-1 coming in
+//   var buff = new Buffer(msg);
+//   // var arr = new Uint16Array(msg);
+//   // var sliced = arr.slice(12,16);
+//   // var buffer = Buffer.from( sliced );
+//   // var hex = buffer.toString('hex');
+//   // var n = flipHexString('0x' + hex, 8);
+//   // var n2 = parseInt(n)/100000;
+
+
+//   // console.log(buff);
+
+//   socketServer.emit('osc', buff);
+
+//   // socketServer.emit('data', {freq: n2/30000});//just made some normalization to have a 0-1 value into viz
+
+// });
+// udpServer.on('listening', () => {
+//   const address = udpServer.address();
+// });
+// udpServer.bind(5001);
 
 
 var oscSender = new osc.Client((CONFIG.OSC_CLIENT_IP || 'localhost'), (CONFIG.OSC_CLIENT_PORT || 9000 ));
@@ -66,10 +87,13 @@ function onClientConnection(client){
       socketServer.emit('transport', data);
   });
 
-
-  client.on('data', function(data){
+  client.on('vis-data', function(data){
+    // console.log(data.freq);
+      // oscSender.send('/planet', Number(data.freq), function(){});
       oscSender.send('/freq', Number(data.freq), function(){});
-      oscSender.send('/send1', data.dist, function(){});
+      oscSender.send('/years', data.years, function(){});
+      oscSender.send('/planet', data.planet, function(){});
+      oscSender.send('/intensity', data.intensity, function(){});
     });
 }
 

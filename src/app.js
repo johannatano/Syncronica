@@ -10,8 +10,37 @@ import './styles.css';
 import Visualiser from './visualiser/Visualiser';
 import Muse from './input/Muse';
 import MuseData from './input/MuseData';
+import Stats from 'stats.js';
 
 import io from 'socket.io-client';
+
+
+window.requestInterval = function(fn, delay) {
+
+
+  if( !window.requestAnimationFrame       && 
+    !window.webkitRequestAnimationFrame && 
+    !(window.mozRequestAnimationFrame && window.mozCancelRequestAnimationFrame) && // Firefox 5 ships without cancel support
+    !window.oRequestAnimationFrame      && 
+    !window.msRequestAnimationFrame)
+      return window.setInterval(fn, delay);
+      
+  var start = new Date().getTime(),
+    handle = new Object();
+    
+  function loop() {
+    var current = new Date().getTime(),
+      delta = current - start;
+      
+    if(delta >= delay) {
+      fn.call();
+      start = new Date().getTime();
+    }
+
+    handle.value = requestAnimFrame(loop);
+  }
+}
+
 
 $(() => {
   var muse = new Muse();
@@ -23,12 +52,25 @@ $(() => {
   visualiser.on('connect-muse', ()=>{
     muse.connect();
   });
+
+  visualiser.on('rendered', (data)=>{
+    socket.emit('vis-data', data);
+  });
+
   const socket = io('http://localhost:3000');
 
-  socket.on('transport', (data) => {
+  socket.on('osc', (data) => {
+    // console.log('osc data', data);
+    
     visualiser.parseInputData(data);
   });
 
+  socket.on('transport', (data) => {
+    console.log('transport datda', data);
+    // visualiser.parseInputData(data);
+  });
+
+  
   // this.socket = io('http://localhost:3000');
   //   this.socket.on('connect', this.onConnected.bind(this));
   //   this.socket.on('disconnect', this.onDisconnect.bind(this));

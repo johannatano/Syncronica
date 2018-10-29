@@ -9,16 +9,18 @@ export default class LineData{
 		this.p1_target = {x: 0, y: 0};
 		this.p2_target = {x: 0, y: 0};
 		this.alpha = this.targetAlpha = 0;
+		this.lifetime = 0;
 		// this.deactivate();
 	}	
 	spawn(p1, p2, index){
 		// if(delay == 10)console.log(p1, p2)
 		this.p1_target = p1;
 		this.p2_target = p2;
-		this.lifetime = 10;//Math.floor(lifetime);
+		this.lifetime = 1;
+		// this.lifetime = 1000;//Math.floor(lifetime);
 		this.targetAlpha = 1;
 		// sequential = true;
-
+		// if(this.index == 0) console.log(p1, p2);
 		// if(!sequential){
 		// 	//hard set
 		// 	this.p1.x = this.p1_target.x;
@@ -93,6 +95,10 @@ export default class LineData{
 	// 	// this.p2_target = null;
 	// }
 
+
+	
+
+
 	tick(){
 		const ease = .1;
 
@@ -102,12 +108,24 @@ export default class LineData{
 		this.p2.x += (this.p2_target.x - this.p2.x) * ease;
 		this.p2.y += (this.p2_target.y - this.p2.y) * ease;
 
-		const fadeEase = this.targetAlpha ? .1 : 0.01;
+		const fadeEase = this.targetAlpha == 1 ? .1 : 0.1;
 		this.alpha += (this.targetAlpha - this.alpha) * fadeEase;
-		if(this.alpha < 0.001) this.alpha = 0;
+		var a = Math.round(this.alpha*100)/100;
 
-		if(this.lifetime) this.lifetime--;
-		else this.kill();
+		if(a == this.targetAlpha) this.alpha = a;
+		
+		if(this.alpha == 1 && this.targetAlpha){
+			this.targetAlpha = 0.1;
+		}
+		// if(this.lifetime <= 0){
+			
+		// }else{
+		// 	this.lifetime--;
+		// }
+		// if(this.index == 100) console.log(this.targetAlpha, this.alpha, this.lifetime);
+		// this.alpha =
+		// if(this.lifetime) this.lifetime--;
+		// else this.kill();
 
 		// if(this.index == 0) console.log(this.lifetime);
 

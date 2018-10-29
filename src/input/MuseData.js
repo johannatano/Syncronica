@@ -2,7 +2,7 @@
 export default class MuseData {
 	constructor() {
 		this.alphaBins = [0];
-		this.betaBins = [1,2];
+		this.betaBins = [1,2,3];
 		this.sensors = [];
 		for(let i = 0; i < 4; i++){
 			this.sensors[i] = {
@@ -12,14 +12,15 @@ export default class MuseData {
 				}
 			};
 		}
-		this.SAMPLING_LEN = 10;
+		this.SAMPLING_LEN = 32;
 		this.values = {
 			concentration: 0,
+			concentrationSamplings: [],
 			excitement: 0
 		}
 	}	
 	parseData(reading){
-		// console.log('read', reading);
+		if(reading.electrode == 1) console.log(reading);
 		let sensor = this.sensors[Number(reading.electrode)];
 		if(!sensor) return;
 		
@@ -34,6 +35,39 @@ export default class MuseData {
 		while(sensor.bands.alpha.length > this.SAMPLING_LEN) sensor.bands.alpha.shift();
 		this.values.excitement = this.calculateExcitement();
 	}
+
+	parseDataArray(arr){
+
+		// console.log(arr);
+
+		if(arr[0].indexOf('beta') >= 0){
+			var beta = 0;
+
+			beta += arr[2];
+			beta += arr[3];
+
+
+			// var conc = beta/2;
+
+			this.values.concentrationSamplings.push(beta/2);
+			while(this.values.concentrationSamplings.length > this.SAMPLING_LEN) this.values.concentrationSamplings.shift();
+			
+			var val = (beta/2);
+
+			console.log(val);
+			// console.log(arr[3]);
+			
+			this.values.concentration = Math.max(Math.min(val, 1),0)
+			
+			// this.values.concentration = (beta/2) * 20;//Math.max(Math.min(( (beta/2) * 20 ), 20), 0)/20;//Math.min(this.mean(this.values.concentrationSamplings), 1);
+			// console.log(beta/2, this.values.concentration);
+			// console.log(this.values.concentration);
+			// console.log(this.values.concentration);
+		}
+		
+
+	}
+
 	calculateConcentration(){
 		var val = 0;
 		val += this.mean(this.sensors[1].bands.beta);
